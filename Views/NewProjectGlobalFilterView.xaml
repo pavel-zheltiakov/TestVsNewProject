@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="VSNewProjectDialogExample.Views.NewProjectGlobalFilterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:VSNewProjectDialogExample.ViewModel"
+             mc:Ignorable="d"
+             DataContext="{Binding Source={StaticResource Locator}, Path=GlobalFilterViewModel}"
+             d:DesignHeight="40" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <DataTemplate DataType="{x:Type viewModel:FrameworkItemVersionViewModel}">
+            <TextBlock Text="{Binding FrameworkName}" />
+        </DataTemplate>
+
+
+        <DataTemplate DataType="{x:Type viewModel:FrameworkItemLinkViewModel}">
+            <Button Content="{Binding Title}" Style="{StaticResource LinkButton}" Command="{Binding OpenLinkCommand}" />
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <Grid 
+          Background="{StaticResource BackgroundDarkBrush}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="220" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal"
+                    >
+            
+            <ComboBox ItemsSource="{Binding FrameworkVersions}" 
+                      SelectedItem="{Binding FrameworkVersion}" VerticalAlignment="Center" Margin="6" MinWidth="180" />
+            
+            <TextBlock VerticalAlignment="Center" Margin="6">Sort by:</TextBlock>
+            <ComboBox ItemsSource="{Binding SortDecorators}" DisplayMemberPath="Name"
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedItem="{Binding SortDecorator, Mode=TwoWay}" VerticalAlignment="Center" Margin="6" MinWidth="200" />
+            <StackPanel Orientation="Horizontal"
+                        DataContext="{Binding Source={StaticResource Locator}, Path=TemplateListViewModel}">
+                <RadioButton Background="Transparent" BorderBrush="Transparent" VerticalAlignment="Center" Margin="6"
+                             Style="{StaticResource {x:Type ToggleButton}}" Command="{Binding SwitchViewCommand}"
+                             CommandParameter="SmallIcons">
+                    <Image Source="{StaticResource ImageSmallIcons}" />
+                </RadioButton>
+                <RadioButton IsChecked="True" BorderBrush="Transparent" Background="Transparent"
+                             VerticalAlignment="Center" Margin="6" Style="{StaticResource {x:Type ToggleButton}}"
+                             Command="{Binding SwitchViewCommand}" CommandParameter="LargeIcons">
+                    <Image Source="{StaticResource ImageLargeIcons}" />
+                </RadioButton>
+            </StackPanel>
+        </StackPanel>
+
+        <ComboBox x:Name="PART_searchBox" IsEditable="True" ItemsSource="{Binding FilterHistory}" Background="Blue"
+                  SelectedValue="{Binding FilterValue, Mode=OneWayToSource}" Text="{Binding FilterValue, Mode=TwoWay}"
+                  Grid.Row="0" Grid.Column="1" Margin="6" Template="{DynamicResource SearchBoxControlTemplate}">
+            <ComboBox.Style>
+                <Style>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsFilterFocused}" Value="True">
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=PART_searchBox}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            </ComboBox.Style>
+            <ComboBox.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
+            </ComboBox.InputBindings>
+                
+        </ComboBox>
+
+    </Grid>
+</UserControl>

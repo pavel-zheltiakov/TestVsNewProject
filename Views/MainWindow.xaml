@@ -1,0 +1,31 @@
+﻿<Window x:Class="VSNewProjectDialogExample.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:VSNewProjectDialogExample.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="1180">
+
+
+    <Grid Background="{StaticResource BackgroundDarkBrush}"
+          DataContext="{Binding Source={StaticResource Locator}, Path=DialogViewModel}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.InputBindings>
+            <KeyBinding Key="E" Modifiers="Control" Command="{Binding Source={StaticResource Locator}, Path=GlobalFilterViewModel.SetFocusSearchCommand}" />
+        </Grid.InputBindings>
+        
+        <views:ProjectTemplateTreeView />
+
+        <views:ProjectTemplateCreationProperties Grid.Row="1" Grid.Column="0" />
+
+        <StackPanel Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button MinWidth="100" Margin="6" >OK</Button>
+            <Button MinWidth="100" Margin="6" >Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>
